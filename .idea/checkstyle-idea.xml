@@ -11,7 +11,7 @@
         <entry key="location-2" value="LOCAL_FILE:$PROJECT_DIR$/checkstyle.xml:checkstyle_from_job4j" />
         <entry key="scan-before-checkin" value="false" />
         <entry key="scanscope" value="JavaOnly" />
-        <entry key="suppress-errors" value="true" />
+        <entry key="suppress-errors" value="false" />
       </map>
     </option>
   </component>
