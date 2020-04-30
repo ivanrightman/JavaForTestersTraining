@@ -25,7 +25,7 @@ public class ContactHelper extends HelperBase {
         type(By.cssSelector("textarea[name=\"address\"]"), contactData.getAddress());
         type(By.cssSelector("input[name=\"mobile\"]"), contactData.getMobile());
         type(By.cssSelector("input[name=\"email\"]"), contactData.getEmail());
-        attache(By.name("photo"), contactData.getPhoto());
+        //attache(By.name("photo"), contactData.getPhoto());
     }
 
     public void submitContactCreation() {
@@ -70,6 +70,7 @@ public class ContactHelper extends HelperBase {
         fillContactForm(contact);
         submitContactModification();
         contactCache = null;
+        gotoHomePage();
     }
 
     public void delete(ContactData contact) {
@@ -77,6 +78,7 @@ public class ContactHelper extends HelperBase {
         deleteSelectedContacts();
         acceptDeleteContact();
         contactCache = null;
+        gotoHomePage();
     }
 
     public void gotoHomePage() {

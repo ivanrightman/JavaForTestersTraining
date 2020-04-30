@@ -24,18 +24,24 @@ public class ContactData {
     @Expose //помечаем те поля, которые должны быть добавлены в json
     @Type(type = "text")
     private String address;
+    @Expose //помечаем те поля, которые должны быть добавлены в json
     @Type(type = "text")
     private String mobile;
+    @Expose //помечаем те поля, которые должны быть добавлены в json
     @Type(type = "text")
     private String email;
+    @Expose //помечаем те поля, которые должны быть добавлены в json
     @Type(type = "text")
     private String email2;
+    @Expose //помечаем те поля, которые должны быть добавлены в json
     @Type(type = "text")
     private String email3;
     @Transient
     private String group;
+    @Expose //помечаем те поля, которые должны быть добавлены в json
     @Type(type = "text")
     private String home;
+    @Expose //помечаем те поля, которые должны быть добавлены в json
     @Type(type = "text")
     private String work;
     @Transient
@@ -188,16 +194,11 @@ public class ContactData {
                 Objects.equals(lastName, that.lastName) &&
                 Objects.equals(address, that.address) &&
                 Objects.equals(mobile, that.mobile) &&
-                Objects.equals(email, that.email) &&
-                Objects.equals(email2, that.email2) &&
-                Objects.equals(email3, that.email3) &&
-                Objects.equals(group, that.group) &&
-                Objects.equals(home, that.home) &&
-                Objects.equals(work, that.work);
+                Objects.equals(email, that.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, address, mobile, email, email2, email3, group, home, work);
+        return Objects.hash(firstName, lastName, address, mobile, email);
     }
 }

@@ -56,15 +56,15 @@ public class ContactCreationTests extends TestBase{
   @Test (dataProvider = "validContactsFromJson")
   public void testContactCreation(ContactData contact) {
       app.goTo().homePage();
-      Contacts before = app.contact().all();
-      File photo = new File("src/test/resources/photo.png");
+      Contacts before = app.db().contacts();
+      //File photo = new File("src/test/resources/photo.png");
       /*ContactData contact = new ContactData()
               .withFirstName("Ivan").withLastName("Ivanov").withAddress("Ul. Street, 12-22")
               .withMobile("32111111").withEmail("123456@mail.com").withGroup("test1")
               .withPhoto(photo);*/
       app.contact().create(contact);
       assertThat(app.contact().count(), equalTo(before.size() + 1));
-      Contacts after = app.contact().all();
+      Contacts after = app.db().contacts();
       assertThat(after, equalTo(
               before.withAdded(contact.withId(after.stream().mapToInt((c) -> c.getId()).max().getAsInt()))));
   }
