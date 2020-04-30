@@ -7,7 +7,9 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.File;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @XStreamAlias("contact")
 @Entity
@@ -36,8 +38,6 @@ public class ContactData {
     @Expose //помечаем те поля, которые должны быть добавлены в json
     @Type(type = "text")
     private String email3;
-    @Transient
-    private String group;
     @Expose //помечаем те поля, которые должны быть добавлены в json
     @Type(type = "text")
     private String home;
@@ -50,6 +50,10 @@ public class ContactData {
     private String allEmails;
     @Type(type = "text")
     private String photo;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "address_in_groups",
+            joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
+    private Set<GroupData> groups = new HashSet<>();
 
     public File getPhoto() {
         return new File(photo);
@@ -121,11 +125,6 @@ public class ContactData {
         return this;
     }
 
-    public ContactData withGroup(String group) {
-        this.group = group;
-        return this;
-    }
-
     public ContactData withHomephone(String home) {
         this.home = home;
         return this;
@@ -166,6 +165,10 @@ public class ContactData {
         return work;
     }
 
+    public Groups getGroups() {
+        return new Groups(groups);
+    }
+
     @Override
     public String toString() {
         return "ContactData{" +
@@ -177,7 +180,6 @@ public class ContactData {
                 ", email='" + email + '\'' +
                 ", email2='" + email2 + '\'' +
                 ", email3='" + email3 + '\'' +
-                ", group='" + group + '\'' +
                 ", home='" + home + '\'' +
                 ", work='" + work + '\'' +
                 ", allPhones='" + allPhones + '\'' +
