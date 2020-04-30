@@ -3,37 +3,54 @@ package ru.stqa.pft.addressbook.model;
 import com.google.gson.annotations.Expose;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
 import java.io.File;
 import java.util.Objects;
 
 @XStreamAlias("contact")
+@Entity
+@Table(name = "addressbook")
 public class ContactData {
     @XStreamOmitField //пропускает поле id и не добавляет его в xml файл
+    @Id
+    @Column(name = "id")
     private int id = Integer.MAX_VALUE;
     @Expose //помечаем те поля, которые должны быть добавлены в json
     private String firstName;
     @Expose //помечаем те поля, которые должны быть добавлены в json
     private String lastName;
     @Expose //помечаем те поля, которые должны быть добавлены в json
+    @Type(type = "text")
     private String address;
+    @Type(type = "text")
     private String mobile;
+    @Type(type = "text")
     private String email;
+    @Type(type = "text")
     private String email2;
+    @Type(type = "text")
     private String email3;
+    @Transient
     private String group;
+    @Type(type = "text")
     private String home;
+    @Type(type = "text")
     private String work;
+    @Transient
     private String allPhones;
+    @Transient
     private String allEmails;
-    private File photo;
+    @Type(type = "text")
+    private String photo;
 
     public File getPhoto() {
-        return photo;
+        return new File(photo);
     }
 
     public ContactData withPhoto(File photo) {
-        this.photo = photo;
+        this.photo = photo.getPath();
         return this;
     }
 
