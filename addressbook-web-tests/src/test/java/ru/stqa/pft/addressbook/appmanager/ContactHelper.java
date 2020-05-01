@@ -3,8 +3,11 @@ package ru.stqa.pft.addressbook.appmanager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.List;
 
@@ -19,13 +22,25 @@ public class ContactHelper extends HelperBase {
         click(By.linkText("add new"));
     }
 
-    public void fillContactForm(ContactData contactData) {
+    public void fillContactForm(ContactData contactData, boolean creation) {
         type(By.cssSelector("input[name=\"firstname\"]"), contactData.getFirstName());
         type(By.cssSelector("input[name=\"lastname\"]"), contactData.getLastName());
         type(By.cssSelector("textarea[name=\"address\"]"), contactData.getAddress());
         type(By.cssSelector("input[name=\"mobile\"]"), contactData.getMobile());
         type(By.cssSelector("input[name=\"email\"]"), contactData.getEmail());
+        type(By.cssSelector("input[name=\"email2\"]"), contactData.getEmail2());
+        type(By.cssSelector("input[name=\"email3\"]"), contactData.getEmail3());
+        type(By.cssSelector("input[name=\"home\"]"), contactData.getHome());
+        type(By.cssSelector("input[name=\"work\"]"), contactData.getWork());
         //attache(By.name("photo"), contactData.getPhoto());
+        if (creation) {
+            if (contactData.getGroups().size() > 0) {
+                Assert.assertTrue(contactData.getGroups().size() == 1);
+                new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroups().iterator().next().getName());
+            }
+        } else {
+            Assert.assertFalse(isElementPresent(By.name("new_group")));
+        }
     }
 
     public void submitContactCreation() {
@@ -52,13 +67,13 @@ public class ContactHelper extends HelperBase {
         wd.switchTo().alert().accept();
     }
 
-    public boolean isThereAContact() {
-        return isElementPresent(By.name("selected[]"));
+    public void selectAllContacts() {
+        wd.findElement(By.cssSelector("input[id='MassCB']")).click();
     }
 
     public void create(ContactData contact) {
         initContactCreation();
-        fillContactForm(contact);
+        fillContactForm(contact, true);
         submitContactCreation();
         contactCache = null;
         gotoHomePage();
@@ -67,10 +82,14 @@ public class ContactHelper extends HelperBase {
     public void modify(ContactData contact) {
         selectContactById(contact.getId());
         initContactModificationById(contact.getId());
-        fillContactForm(contact);
-        submitContactModification();
+        editContact(contact);
         contactCache = null;
         gotoHomePage();
+    }
+
+    public void editContact(ContactData contact) {
+        fillContactForm(contact, false);
+        submitContactModification();
     }
 
     public void delete(ContactData contact) {
@@ -129,7 +148,26 @@ public class ContactHelper extends HelperBase {
         wd.navigate().back();
         return new ContactData().withId(contact.getId()).withFirstName(firstName).withFirstName(lastName).withAddress(address)
                 .withEmail(email).withEmail2(email2).withEmail3(email3).withHomephone(home).withMobile(mobile).withWorkPhone(work);
+    }
 
+    public void selectGroup(String group, String element) {
+        new Select(wd.findElement(By.name(element))).selectByVisibleText(group);
+    }
+
+    public void addToGroup(ContactData contact, GroupData group) {
+        selectGroup("[all]", "group");
+        selectContactById(contact.getId());
+        new Select(wd.findElement(By.name("to_group"))).selectByValue(Integer.toString(group.getId()));
+        click(By.name("add"));
+        gotoHomePage();
+    }
+
+    public void removeFromGroup(ContactData contact, GroupData group) {
+        selectGroup("[all]", "group");
+        selectGroup(group.getName(), "group");
+        selectAllContacts();
+        //selectContactById(contact.getId());
+        click(By.name("remove"));
     }
 }
 

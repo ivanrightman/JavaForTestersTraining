@@ -169,6 +169,11 @@ public class ContactData {
         return new Groups(groups);
     }
 
+    public ContactData inGroup(GroupData group) {
+        groups.add(group);
+        return this;
+    }
+
     @Override
     public String toString() {
         return "ContactData{" +
@@ -196,11 +201,15 @@ public class ContactData {
                 Objects.equals(lastName, that.lastName) &&
                 Objects.equals(address, that.address) &&
                 Objects.equals(mobile, that.mobile) &&
-                Objects.equals(email, that.email);
+                Objects.equals(email, that.email) &&
+                Objects.equals(email2, that.email2) &&
+                Objects.equals(email3, that.email3) &&
+                Objects.equals(home, that.home) &&
+                Objects.equals(work, that.work);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, address, mobile, email);
+        return Objects.hash(firstName, lastName, address, mobile, email, email2, email3, home, work);
     }
 }
