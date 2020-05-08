@@ -23,7 +23,8 @@ public class SoapHelper {
     public Set<Project> getProjects() throws MalformedURLException, ServiceException, RemoteException {
         MantisConnectPortType mc = getMantisConnect();
         ProjectData[] projects = mc.mc_projects_get_user_accessible(
-               "administrator", "root");
+                app.getProperty("web.adminLogin"), app.getProperty("web.adminPassword")
+        );
         return Arrays.asList(projects).stream()
                 .map((p) -> new Project().withId(p.getId().intValue()).withName(p.getName()))
                 .collect(Collectors.toSet());
@@ -31,20 +32,20 @@ public class SoapHelper {
 
     public MantisConnectPortType getMantisConnect() throws MalformedURLException, ServiceException {
         return new MantisConnectLocator()
-                .getMantisConnectPort(new URL("http://localhost/mantisbt-2.24.0/api/soap/mantisconnect.php"));
+                .getMantisConnectPort(new URL(app.getProperty("mantis.connectUrl")));
     }
 
     public Issue addIssue(Issue issue) throws MalformedURLException, ServiceException, RemoteException {
         MantisConnectPortType mc = getMantisConnect();
         String[] categories = mc.mc_project_get_categories(
-                "administrator", "root", BigInteger.valueOf(issue.getProject().getId()));
+                app.getProperty("web.adminLogin"), app.getProperty("web.adminPassword"), BigInteger.valueOf(issue.getProject().getId()));
         IssueData issueData = new IssueData();
         issueData.setSummary(issue.getSummary());
         issueData.setDescription(issue.getDescription());
         issueData.setProject(new ObjectRef(BigInteger.valueOf(issue.getProject().getId()), issue.getProject().getName()));
         issueData.setCategory(categories[0]);
-        BigInteger issueId = mc.mc_issue_add( "administrator", "root", issueData);
-        IssueData createdIssueData = mc.mc_issue_get( "administrator", "root", issueId);
+        BigInteger issueId = mc.mc_issue_add(app.getProperty("web.adminLogin"), app.getProperty("web.adminPassword"), issueData);
+        IssueData createdIssueData = mc.mc_issue_get( app.getProperty("web.adminLogin"), app.getProperty("web.adminPassword"), issueId);
         return new Issue().withId(createdIssueData.getId().intValue()).withSummary(createdIssueData.getSummary())
                 .withDescription(createdIssueData.getDescription())
                 .withProject(new Project()
@@ -54,7 +55,7 @@ public class SoapHelper {
 
     public Issue getIssueById(int issueId) throws MalformedURLException, ServiceException, RemoteException {
         MantisConnectPortType mc = getMantisConnect();
-        IssueData issueData = mc.mc_issue_get( "administrator", "root", BigInteger.valueOf(issueId));
+        IssueData issueData = mc.mc_issue_get(app.getProperty("web.adminLogin"), app.getProperty("web.adminPassword"), BigInteger.valueOf(issueId));
         return new Issue().withId(issueData.getId().intValue())
                 .withResolution(issueData.getResolution().getName())
                 .withDescription(issueData.getDescription())

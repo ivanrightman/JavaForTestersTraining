@@ -37,8 +37,8 @@ public class SoapTests extends TestBase{
     @Test
     public void testCreateIssue() throws RemoteException, ServiceException, MalformedURLException {
         try {
-            //skipIfNotFixed(0000001);
-            skipIfNotFixed(0000002); //status="fixed"
+            skipIfNotFixed(0000001);
+            //skipIfNotFixed(0000002); //status="fixed"
         } catch (SkipException e) {
             e.printStackTrace();
         }
