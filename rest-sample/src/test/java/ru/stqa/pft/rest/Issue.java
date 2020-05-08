@@ -47,4 +47,13 @@ public class Issue {
     public int hashCode() {
         return Objects.hash(id, subject, description);
     }
+
+    @Override
+    public String toString() {
+        return "Issue{" +
+                "id=" + id +
+                ", subject='" + subject + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
