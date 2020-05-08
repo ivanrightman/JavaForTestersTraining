@@ -2,7 +2,6 @@ package ru.stqa.pft.rest;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
@@ -36,7 +35,7 @@ public class RestTests {
     }
 
     private Executor getExecutor() {
-        return Executor.newInstance().auth("998ca51d372ae260f6bd969029af1410", "");
+        return Executor.newInstance().auth("3aaaa0a562d97c14afaf6720167b26c8", "");
     }
 
     private int createIssue(Issue newIssue) throws IOException {

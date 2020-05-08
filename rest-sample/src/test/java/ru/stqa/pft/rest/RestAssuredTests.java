@@ -2,18 +2,11 @@ package ru.stqa.pft.rest;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.jayway.restassured.RestAssured;
-import org.apache.http.client.fluent.Executor;
-import org.apache.http.client.fluent.Request;
-import org.apache.http.message.BasicNameValuePair;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.io.IOException;
 import java.util.Set;
-
 import static com.google.gson.JsonParser.parseString;
 import static org.testng.AssertJUnit.assertEquals;
 
@@ -25,7 +18,7 @@ public class RestAssuredTests {
     }
 
     @Test
-    public void testCreateIssue() throws IOException {
+    public void testCreateIssue() {
         Set<Issue> oldIssues = getIssues();
         Issue newIssue = new Issue().withSubject("Test issue").withDescription("New test issue");
         int issueId = createIssue(newIssue);
@@ -34,14 +27,14 @@ public class RestAssuredTests {
         assertEquals(newIssues, oldIssues);
     }
 
-    private Set<Issue> getIssues() throws IOException {
+    private Set<Issue> getIssues() {
         String json = RestAssured.get("http://demo.bugify.com/api/issues.json").asString();
         JsonElement parsed = parseString(json);
         JsonElement issues = parsed.getAsJsonObject().get("issues");
         return new Gson().fromJson(issues, new TypeToken<Set<Issue>>() {}.getType());
     }
 
-    private int createIssue(Issue newIssue) throws IOException {
+    private int createIssue(Issue newIssue) {
         String json = RestAssured.given()
                 .parameter("subject", newIssue.getSubject())
                 .parameter("description", newIssue.getDescription())
